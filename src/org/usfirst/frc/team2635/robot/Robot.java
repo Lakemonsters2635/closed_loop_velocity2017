@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  * to throttle the Talon manually.  This will confirm your hardware setup.
  * Be sure to confirm that when the Talon is driving forward (green) the 
  * position sensor is moving in a positive direction.  If this is not the cause
- * flip the boolena input to the SetSensorDirection() call below.
+ * flip the boolean input to the SetSensorDirection() call below.
  *
  * Once you've ensured your feedback device is in-phase with the motor,
  * use the button shortcuts to servo to target velocity.  
@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  */
 import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Joystick.AxisType;
+//import edu.wpi.first.wpilibj.Joystick.AxisType;
 import com.ctre.CANTalon.FeedbackDevice;
 import com.ctre.CANTalon.TalonControlMode;
 
@@ -47,7 +47,9 @@ private static final int SHOOTER_TALON_L = 6;
         //_talon.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
         L_talon.setFeedbackDevice(FeedbackDevice.QuadEncoder);
         L_talon.reverseSensor(false);
-        L_talon.configEncoderCodesPerRev(1000); // if using FeedbackDevice.QuadEncoder
+        L_talon.configEncoderCodesPerRev(250); // if using FeedbackDevice.QuadEncoder
+        L_talon.setInverted(true);
+        
         //_talon.configPotentiometerTurns(XXX), // if using FeedbackDevice.AnalogEncoder or AnalogPot
 
         /* set the peak and nominal outputs, 12V means full */
@@ -66,7 +68,7 @@ private static final int SHOOTER_TALON_L = 6;
     public void teleopPeriodic() {
     	/* get gamepad axis */
     	//double leftYstick = L_joy.getAxis(AxisType.kY);
-    	double leftYstick = -1.0 * _joy.getRawAxis(1);
+    	double leftYstick = 1.0 * _joy.getRawAxis(1);
     	double motorOutput_R = L_talon.getOutputVoltage() / L_talon.getBusVoltage();
     	/* prepare line to print */
 		_sb.append("\tout:");
@@ -80,6 +82,7 @@ private static final int SHOOTER_TALON_L = 6;
         	L_talon.changeControlMode(TalonControlMode.Speed);
         	//_talon.set(targetSpeed); /* 1500 RPM in either direction */
         	L_talon.set(LtargetSpeed); /* 1500 RPM in either direction */
+        	L_talon.enable();
         	/* append more signals to print when in speed mode. */
             _sb.append("\terr:");
             _sb.append(L_talon.getClosedLoopError());
@@ -101,7 +104,8 @@ private static final int SHOOTER_TALON_L = 6;
         //_talon.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
         R_talon.setFeedbackDevice(FeedbackDevice.QuadEncoder);
         R_talon.reverseSensor(false);
-        R_talon.configEncoderCodesPerRev(1000); // if using FeedbackDevice.QuadEncoder
+        R_talon.configEncoderCodesPerRev(250); // if using FeedbackDevice.QuadEncoder
+        
         //_talon.configPotentiometerTurns(XXX), // if using FeedbackDevice.AnalogEncoder or AnalogPot
 
         /* set the peak and nominal outputs, 12V means full */
@@ -130,6 +134,7 @@ private static final int SHOOTER_TALON_L = 6;
         	R_talon.changeControlMode(TalonControlMode.Speed);
         	//_talon.set(targetSpeed); /* 1500 RPM in either direction */
         	R_talon.set(RtargetSpeed); /* 1500 RPM in either direction */
+        	R_talon.enable();
         	/* append more signals to print when in speed mode. */
             _sb.append("\terr:");
             _sb.append(R_talon.getClosedLoopError());
